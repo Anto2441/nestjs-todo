@@ -18,7 +18,6 @@ import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { ExampleGuard } from './guards/example.guard';
 import { LoggerInterceptor } from './interceptors/logger/logger.interceptor';
-import { BrunoService } from 'src/bruno/bruno.service';
 
 @UseInterceptors(LoggerInterceptor)
 @UseGuards(ExampleGuard)
@@ -26,7 +25,6 @@ import { BrunoService } from 'src/bruno/bruno.service';
 export class TodosController {
   constructor(
     private readonly todosService: TodosService,
-    private readonly brunoService: BrunoService,
     @Inject('NAME_TOKEN')
     private readonly name: string,
   ) {}
@@ -34,7 +32,6 @@ export class TodosController {
   @Get()
   getTodos() {
     console.log(this.name);
-    console.log(this.brunoService.example());
     return this.todosService.getTodos();
   }
 
