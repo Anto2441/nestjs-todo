@@ -12,12 +12,14 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
+import { ConfigType } from '@nestjs/config';
 
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
 import { ExampleGuard } from './guards/example.guard';
 import { LoggerInterceptor } from './interceptors/logger/logger.interceptor';
+import todosConfig from './config/todos.config';
 
 @UseInterceptors(LoggerInterceptor)
 @UseGuards(ExampleGuard)
@@ -25,13 +27,13 @@ import { LoggerInterceptor } from './interceptors/logger/logger.interceptor';
 export class TodosController {
   constructor(
     private readonly todosService: TodosService,
-    @Inject('NAME_TOKEN')
-    private readonly name: string,
+    @Inject(todosConfig.KEY)
+    private readonly config: ConfigType<typeof todosConfig>,
   ) {}
 
   @Get()
   getTodos() {
-    console.log(this.name);
+    console.log(this.config.database.port);
     return this.todosService.getTodos();
   }
 
