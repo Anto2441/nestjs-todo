@@ -9,20 +9,15 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 
 import { TodosService } from './todos.service';
 import { CreateTodoDto } from './dto/create-todo.dto';
 import { UpdateTodoDto } from './dto/update-todo.dto';
-import { ExampleGuard } from './guards/example.guard';
-import { LoggerInterceptor } from './interceptors/logger/logger.interceptor';
+
 import todosConfig from './config/todos.config';
 
-@UseInterceptors(LoggerInterceptor)
-@UseGuards(ExampleGuard)
 @Controller('todos')
 export class TodosController {
   constructor(
@@ -32,9 +27,10 @@ export class TodosController {
   ) {}
 
   @Get()
-  getTodos() {
-    console.log(this.config.database.port);
-    return this.todosService.getTodos();
+  async getTodos() {
+    const todos = await this.todosService.getTodos();
+
+    return todos;
   }
 
   @Get(':todoId')
@@ -43,8 +39,10 @@ export class TodosController {
   }
 
   @Post()
-  createTodo(@Body() createTodoDto: CreateTodoDto) {
-    return this.todosService.createTodo(createTodoDto);
+  async createTodo(@Body() createTodoDto: CreateTodoDto) {
+    const newTodo = await this.todosService.createTodo(createTodoDto);
+
+    return newTodo;
   }
 
   @Patch(':todoId')
